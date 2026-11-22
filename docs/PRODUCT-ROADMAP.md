@@ -1,25 +1,32 @@
 # Product Roadmap
 
-## Current milestone — Risk Register MVP
-- [x] Browser-based risk register
-- [x] Likelihood × impact scoring (1–25)
-- [x] Risk rating bands
-- [x] Owner, asset, status, due date, and treatment plan fields
-- [x] Search and rating filters
-- [x] CSV export and JSON backup
-- [x] Local browser storage
-- [ ] CEO review and usability feedback
+## Current milestone — Local-first GRC workspace MVP
+- [x] Overview dashboard and work queue
+- [x] Risk register with likelihood × impact scoring, rating bands, owner, treatment, and due date
+- [x] Risk search, rating filter, edit/delete, and CSV export
+- [x] Starter ISO/IEC 27001:2022 control tracker with applicability and status
+- [x] Audit evidence register with owner, reference, review date, and status
+- [x] JSON backup/import and module CSV exports
+- [x] User guide, service offer, discovery checklist, outreach template
+- [ ] CEO review and hands-on usability testing
+- [ ] Browser compatibility, accessibility, and security testing
 
-## Next milestones (not yet implemented)
-1. Control library and ISO/IEC 27001:2022 control applicability tracker.
-2. Audit evidence register with evidence owner, location/reference, review date, and status.
-3. Risk treatment action tracking and overdue indicators.
-4. Dashboard summaries and management reporting.
-5. Import/export validation and data portability improvements.
-6. Security and privacy review before any multi-user or hosted deployment.
+## Next milestone — Validate the service before expanding the software
+1. Conduct discovery calls with prospective small-business clients and GRC consultants.
+2. Validate which deliverable they will pay for: risk register setup, ISO readiness support, or evidence organization.
+3. Deliver one tightly scoped pilot using sanitized client inputs and written approval.
+4. Refine the workflow from actual feedback before building accounts, cloud storage, or AI features.
+
+## Future product milestones
+- Complete control catalog with appropriate licensing/source validation and version tracking.
+- Risk treatment actions, residual risk, risk acceptance, and approval history.
+- Evidence review reminders and expiry tracking.
+- Import validation, audit trail, and role-based access.
+- Security architecture, threat modeling, privacy assessment, secure hosting, backups, and recovery testing.
+- Multi-user deployment only after security, privacy, retention, and access control are designed and reviewed.
 
 ## Product principles
-- Start with a useful, transparent, low-cost prototype.
-- Do not imply certification, guaranteed compliance, or audit assurance.
-- Avoid collecting sensitive client data until security, privacy, access control, retention, and hosting have been designed and reviewed.
-- Validate the workflow with prospective users before investing in hosted SaaS features.
+- Keep the initial workflow low-cost and transparent.
+- Never imply certification, guaranteed compliance, or audit assurance.
+- Do not collect sensitive client data until security and privacy controls are designed.
+- Validate willingness to pay before investing in hosted SaaS infrastructure.
