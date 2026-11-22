@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="AS GRC Copilot — a lightweight, local-first GRC risk register prototype.">
+<title>AS GRC Copilot | Risk Register</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--panel:#111c2e;--panel2:#16243a;--line:#263750;--text:#e8eef8;--muted:#9aabc2;--cyan:#53d5e8;--blue:#6d9eff;--red:#ff7474;--amber:#ffc66d;--green:#63d7a1}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0%,#152844 0,transparent 32%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:28px clamp(18px,4vw,52px) 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:13px}.logo{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--cyan),var(--blue));color:#071321;display:grid;place-items:center;font-weight:900;font-size:20px}.eyebrow{color:var(--cyan);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:800}h1{font-size:clamp(21px,3vw,29px);margin:0}header p{margin:2px 0 0;color:var(--muted);font-size:13px}
+button,.button{border:1px solid #36516f;background:#1a2b43;color:var(--text);padding:10px 14px;border-radius:10px;cursor:pointer;font:inherit;font-weight:650}button:hover,.button:hover{border-color:var(--cyan);background:#203954}.primary{background:var(--cyan);border-color:var(--cyan);color:#061622}.danger{border-color:#70434a;color:#ffaaaa;background:#301f2a}.wrap{max-width:1280px;margin:auto;padding:26px clamp(16px,4vw,48px) 60px}
+.notice{padding:12px 15px;border:1px solid #37516d;border-radius:12px;background:#11243a;color:#b9cce2;font-size:13px;margin-bottom:20px}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:20px}.metric,.panel{background:linear-gradient(145deg,var(--panel),#0f1929);border:1px solid var(--line);border-radius:16px}.metric{padding:17px}.metric span{display:block;color:var(--muted);font-size:12px}.metric strong{font-size:27px;display:block;margin-top:5px}.metric small{color:var(--muted)}
+.panel{padding:20px;margin-bottom:18px}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}h2{font-size:17px;margin:0}.muted{color:var(--muted)}.toolbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center}input,select,textarea{background:#0b1524;color:var(--text);border:1px solid #344963;border-radius:9px;padding:10px 11px;font:inherit;min-width:0}input:focus,select:focus,textarea:focus{outline:2px solid #53d5e855;border-color:var(--cyan)}.toolbar input{min-width:220px}
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:760px}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:middle}th{color:#9fb4cd;font-size:11px;text-transform:uppercase;letter-spacing:.08em}td{font-size:13px}.risk-title{font-weight:700}.sub{display:block;color:var(--muted);font-size:11px;margin-top:2px}.pill{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:800}.low{background:#163d35;color:#7ce2b5}.medium{background:#4a3a1d;color:#ffd17d}.high{background:#4a2b25;color:#ffad86}.critical{background:#51242f;color:#ff8e9a}.empty{text-align:center;padding:32px;color:var(--muted)}
+.modal{position:fixed;inset:0;background:#020711c9;display:none;place-items:center;padding:18px;z-index:5}.modal.open{display:grid}.dialog{width:min(680px,100%);max-height:92vh;overflow:auto;background:#111d30;border:1px solid #3a526e;border-radius:18px;padding:22px;box-shadow:0 24px 80px #0009}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:12px;color:#b4c5da;font-weight:700}.field textarea{min-height:76px;resize:vertical}.dialog-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}
+footer{color:#7f93ad;font-size:12px;text-align:center;padding:14px}
+@media(max-width:760px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.wrap{padding-top:18px}.metric strong{font-size:23px}}
+@media(max-width:420px){.metrics{grid-template-columns:1fr 1fr}.toolbar input{min-width:100%}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">G</div><div><div class="eyebrow">AS · Governance / Risk / Compliance</div><h1>GRC Copilot <span style="color:var(--cyan)">/ Risk Register</span></h1><p>Practical risk visibility for teams that need to act.</p></div></div><div class="toolbar"><button id="exportBtn">Export CSV</button><button id="backupBtn">Backup JSON</button><button class="primary" id="addBtn">＋ Add risk</button></div></header>
+<main class="wrap">
+<div class="notice"><strong>Prototype notice:</strong> This browser-based MVP stores records only in this browser using local storage. Do not enter confidential, personal, regulated, or production banking information. Export a backup regularly.</div>
+<section class="metrics" aria-label="Risk summary">
+<div class="metric"><span>Total risks</span><strong id="total">0</strong><small>All recorded items</small></div>
+<div class="metric"><span>Critical risks</span><strong id="critical">0</strong><small>Score 20–25</small></div>
+<div class="metric"><span>High risks</span><strong id="high">0</strong><small>Score 12–19</small></div>
+<div class="metric"><span>Open treatment actions</span><strong id="open">0</strong><small>Not marked complete</small></div>
+</section>
+<section class="panel">
+<div class="panel-head"><div><h2>Risk register</h2><div class="muted" style="font-size:12px;margin-top:3px">Assess, prioritize, assign ownership, and track treatment.</div></div><div class="toolbar"><input id="search" type="search" placeholder="Search risks, assets, owners…" aria-label="Search risks"><select id="filter"><option value="all">All ratings</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select></div></div>
+<div class="table-wrap"><table><thead><tr><th>Risk / asset</th><th>Owner</th><th>Likelihood</th><th>Impact</th><th>Score</th><th>Rating</th><th>Status</th><th>Action</th></tr></thead><tbody id="rows"></tbody></table><div id="empty" class="empty">No risks yet. Select <strong>Add risk</strong> to create your first record.</div></div>
+</section>
+<footer>AS GRC Copilot · Early prototype · No certification or compliance assurance is provided.</footer>
+</main>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="formTitle"><div class="dialog"><div class="panel-head"><h2 id="formTitle">Add a risk</h2><button id="closeX" aria-label="Close">✕</button></div><form id="riskForm"><input type="hidden" id="riskId"><div class="form-grid">
+<div class="field full"><label for="title">Risk title *</label><input id="title" required maxlength="120" placeholder="e.g. Unauthorized access to shared drive"></div>
+<div class="field"><label for="asset">Affected asset / process</label><input id="asset" maxlength="100" placeholder="e.g. Shared drive"></div>
+<div class="field"><label for="owner">Risk owner</label><input id="owner" maxlength="80" placeholder="Role or team"></div>
+<div class="field"><label for="likelihood">Likelihood (1–5) *</label><select id="likelihood" required><option value="1">1 — Rare</option><option value="2">2 — Unlikely</option><option value="3" selected>3 — Possible</option><option value="4">4 — Likely</option><option value="5">5 — Almost certain</option></select></div>
+<div class="field"><label for="impact">Impact (1–5) *</label><select id="impact" required><option value="1">1 — Insignificant</option><option value="2">2 — Minor</option><option value="3" selected>3 — Moderate</option><option value="4">4 — Major</option><option value="5">5 — Severe</option></select></div>
+<div class="field"><label for="status">Treatment status</label><select id="status"><option>Open</option><option>In progress</option><option>Completed</option><option>Accepted</option></select></div>
+<div class="field"><label for="due">Target date</label><input id="due" type="date"></div>
+<div class="field full"><label for="treatment">Treatment / mitigation plan</label><textarea id="treatment" maxlength="600" placeholder="Describe the planned response, control, or next step."></textarea></div>
+</div><div class="dialog-actions"><button type="button" id="cancelBtn">Cancel</button><button type="submit" class="primary">Save risk</button></div></form></div></div>
+<script>
+(()=>{'use strict';
+const KEY='as-grc-copilot-risks-v1';let risks=[];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rating=n=>n>=20?'Critical':n>=12?'High':n>=6?'Medium':'Low';
+const load=()=>{try{const v=JSON.parse(localStorage.getItem(KEY)||'[]');risks=Array.isArray(v)?v:[]}catch{risks=[]}};
+const save=()=>localStorage.setItem(KEY,JSON.stringify(risks));
+const render=()=>{
+ const counts={Critical:0,High:0,Medium:0,Low:0};risks.forEach(r=>counts[rating(r.likelihood*r.impact)]++);
+ $('total').textContent=risks.length;$('critical').textContent=counts.Critical;$('high').textContent=counts.High;$('open').textContent=risks.filter(r=>!['Completed','Accepted'].includes(r.status)).length;
+ const q=$('search').value.toLowerCase(),f=$('filter').value;
+ const filtered=risks.filter(r=>(f==='all'||rating(r.likelihood*r.impact).toLowerCase()===f.toLowerCase())&&[r.title,r.asset,r.owner,r.treatment].join(' ').toLowerCase().includes(q));
+ $('rows').innerHTML=filtered.map(r=>{const score=r.likelihood*r.impact,level=rating(score);return '<tr><td><span class="risk-title">'+esc(r.title)+'</span><span class="sub">'+esc(r.asset||'No asset specified')+'</span></td><td>'+esc(r.owner||'Unassigned')+'</td><td>'+r.likelihood+'</td><td>'+r.impact+'</td><td><strong>'+score+'/25</strong></td><td><span class="pill '+level.toLowerCase()+'">'+level+'</span></td><td>'+esc(r.status)+'</td><td><button data-edit="'+esc(r.id)+'">Edit</button> <button class="danger" data-delete="'+esc(r.id)+'" aria-label="Delete '+esc(r.title)+'">×</button></td></tr>'}).join('');
+ $('empty').style.display=filtered.length?'none':'block';
+};
+const open=(r)=>{ $('riskForm').reset();$('riskId').value=r?.id||'';$('formTitle').textContent=r?'Edit risk':'Add a risk';$('title').value=r?.title||'';$('asset').value=r?.asset||'';$('owner').value=r?.owner||'';$('likelihood').value=r?.likelihood||3;$('impact').value=r?.impact||3;$('status').value=r?.status||'Open';$('due').value=r?.due||'';$('treatment').value=r?.treatment||'';$('modal').classList.add('open');$('title').focus()};
+const close=()=>$('modal').classList.remove('open');
+$('addBtn').onclick=()=>open();$('closeX').onclick=close;$('cancelBtn').onclick=close;$('modal').addEventListener('click',e=>{if(e.target===$('modal'))close()});
+$('riskForm').onsubmit=e=>{e.preventDefault();const id=$('riskId').value||((crypto.randomUUID&&crypto.randomUUID())||String(Date.now()));const item={id,title:$('title').value.trim(),asset:$('asset').value.trim(),owner:$('owner').value.trim(),likelihood:Number($('likelihood').value),impact:Number($('impact').value),status:$('status').value,due:$('due').value,treatment:$('treatment').value.trim(),updatedAt:new Date().toISOString()};const i=risks.findIndex(x=>x.id===id);if(i>=0)risks[i]=item;else risks.unshift(item);save();render();close()};
+$('rows').onclick=e=>{const edit=e.target.closest('[data-edit]'),del=e.target.closest('[data-delete]');if(edit){const r=risks.find(x=>x.id===edit.dataset.edit);if(r)open(r)}if(del){const r=risks.find(x=>x.id===del.dataset.delete);if(r&&confirm('Delete this risk record?')){risks=risks.filter(x=>x.id!==r.id);save();render()}}};
+$('search').oninput=render;$('filter').onchange=render;
+$('exportBtn').onclick=()=>{const cols=['title','asset','owner','likelihood','impact','score','rating','status','due','treatment','updatedAt'];const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';const lines=[cols.join(','),...risks.map(r=>cols.map(c=>q(c==='score'?r.likelihood*r.impact:c==='rating'?rating(r.likelihood*r.impact):r[c])).join(','))];download('as-grc-risk-register.csv',lines.join('\r\n'),'text/csv;charset=utf-8')};
+$('backupBtn').onclick=()=>download('as-grc-risk-backup.json',JSON.stringify({product:'AS GRC Copilot',version:1,exportedAt:new Date().toISOString(),risks},null,2),'application/json');
+function download(name,data,type){const blob=new Blob([data],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
+load();render();
+})();
+</script>
+</body></html>
