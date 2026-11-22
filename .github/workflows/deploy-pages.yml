@@ -2,7 +2,8 @@ name: Deploy AS GRC Copilot to GitHub Pages
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -11,29 +12,37 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: github-pages
   cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-      - name: Upload static site
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: .
-
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare static website
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _site/app
+          test -s index.html
+          test -s app/index.html
+          cp index.html _site/index.html
+          cp app/index.html _site/app/index.html
+          if [ -d assets ]; then cp -R assets _site/assets; fi
+          echo "Prepared website files:"
+          find _site -maxdepth 3 -type f -print
+
+      - name: Upload website artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy website
         id: deployment
         uses: actions/deploy-pages@v4
