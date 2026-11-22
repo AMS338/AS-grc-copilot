@@ -1,43 +1,35 @@
-# AS GRC Copilot — Prototype User Guide
+# AS GRC Copilot — User Guide
 
-## Open the prototype
-Open `app/index.html` in a modern desktop or mobile browser. No build step, account, server, or API key is required.
+## Start
+Open `app/index.html` in a modern browser. No build step, paid API, account, or server is needed.
 
-## Add a risk
-1. Select **Add risk**.
-2. Enter a concise risk title.
-3. Add the affected asset/process and an accountable owner where known.
-4. Select likelihood and impact from 1 to 5.
-5. Record the treatment status, target date, and mitigation plan.
-6. Select **Save risk**.
+## Overview
+The Overview page summarizes risk ratings, control records, evidence records, and outstanding work.
 
-## Scoring model
-The prototype calculates an inherent score as:
+## Risk register
+1. Open **Risk register** and select **Add risk**.
+2. Enter a title, affected asset/process, owner, likelihood (1–5), impact (1–5), treatment status, target date, and treatment plan.
+3. Save the record. Use search and rating filters to find it later.
+4. Edit or delete records from the Actions column.
+5. Export the register to CSV.
 
-`Likelihood × Impact` (range 1–25)
+The prototype calculates inherent score as likelihood × impact (1–25), using illustrative bands: 1–5 Low, 6–11 Medium, 12–19 High, 20–25 Critical. Approve your own definitions and thresholds before operational use.
 
-| Score | Rating |
-|---:|---|
-| 1–5 | Low |
-| 6–11 | Medium |
-| 12–19 | High |
-| 20–25 | Critical |
+## ISO controls
+The Controls page starts with a small sample of ISO/IEC 27001:2022 controls. Add or edit controls, record applicability, implementation status, owner, and an evidence reference. The list is not the full Annex A catalog; verify the authoritative standard and your organization's scope.
 
-This is a simple illustrative model. An organization should approve its own risk methodology, thresholds, definitions, appetite, and escalation rules before operational use.
+## Audit evidence
+Record an evidence title, description, related control/risk, owner, approved repository reference, review date, and status. Store evidence files in an approved repository; this prototype does not upload or protect evidence files.
 
-## Manage records
-- Use search to find records by title, asset, owner, or treatment.
-- Use the rating selector to filter the register.
-- Select **Edit** to update a record.
-- Select **×** to delete a record after confirmation.
+## Backup and restore
+- **Export data** downloads a JSON backup of all modules.
+- **Import backup** replaces all current records in this browser after confirmation.
+- Each module has its own CSV export.
 
-## Export and backup
-- **Export CSV** creates a spreadsheet-friendly risk register.
-- **Backup JSON** downloads a complete JSON backup that can be retained separately.
+Keep backups in an approved secure location. Importing a backup replaces the records currently stored in the browser.
 
 ## Data handling and limitations
-- Records are stored in the current browser profile using local storage.
-- Data is not synchronized between devices or users.
-- Clearing browser storage can remove records; export backups regularly.
-- Do not enter confidential, personal, regulated, customer, or production banking data.
-- This is an early prototype, not an audited product, risk-management system of record, legal opinion, compliance determination, or certification service.
+- Records are stored in this browser profile using local storage.
+- There is no server database, user authentication, encryption-at-rest guarantee, or team synchronization.
+- Do not enter confidential, personal, regulated, customer, or production banking information.
+- This is an early prototype, not a system of record, legal opinion, audit opinion, certification service, or compliance guarantee.
